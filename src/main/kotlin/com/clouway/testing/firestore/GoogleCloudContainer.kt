@@ -7,4 +7,4 @@ import org.testcontainers.containers.GenericContainer
  *
  * @author Miroslav Genov (miroslav.genov@clouway.com)
  */
-class GoogleCloudContainer : GenericContainer<GoogleCloudContainer>("pathmotion/firestore-emulator-docker")
+class GoogleCloudContainer : GenericContainer<GoogleCloudContainer>("clouway/firestore-emulator:alpine")
