@@ -1,6 +1,7 @@
 package com.clouway.testing.firestore
 
-import com.google.cloud.NoCredentials
+import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider
 import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.FirestoreOptions
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
@@ -17,25 +18,38 @@ class DockerEmulatorRunner : EmulatorRunner {
 
     override fun start(): FirestorePort {
         firestoreContainer =
-                GoogleCloudContainer()
-                        .withExposedPorts(emulatorPort)
-                        .withEnv("FIRESTORE_PROJECT_ID", projectName)
-                        .waitingFor(LogMessageWaitStrategy().withRegEx("(?s).*running.*$"))
+            GoogleCloudContainer()
+                .withExposedPorts(emulatorPort)
+                .withEnv("FIRESTORE_PROJECT_ID", projectName)
+                .waitingFor(LogMessageWaitStrategy().withRegEx("(?s).*running.*$"))
 
         firestoreContainer.start()
 
         val firestoreService: Firestore by lazy {
-            val containerHost = "${firestoreContainer.containerIpAddress}:${firestoreContainer.getMappedPort(emulatorPort)}"
+            val containerHost =
+                "${firestoreContainer.containerIpAddress}:${firestoreContainer.getMappedPort(emulatorPort)}"
 
             FirestoreOptions.newBuilder()
-                    .setProjectId(projectName)
-                    .setHost(containerHost)
-                    .setCredentials(NoCredentials.getInstance())
-                    .build()
-                    .service
+                .setProjectId(projectName)
+                .setChannelProvider(
+                    InstantiatingGrpcChannelProvider.newBuilder()
+                        .setEndpoint(containerHost)
+                        .setChannelConfigurator { input ->
+                            input.usePlaintext()
+                            input
+                        }
+                        .build()
+                )
+                .setCredentialsProvider(FixedCredentialsProvider.create(FakeCreds))
+                .build()
+                .service
         }
 
-        return FirestorePort(firestoreService, firestoreContainer.containerIpAddress, firestoreContainer.getMappedPort(emulatorPort))
+        return FirestorePort(
+            firestoreService,
+            firestoreContainer.containerIpAddress,
+            firestoreContainer.getMappedPort(emulatorPort)
+        )
     }
 
 
