@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-     compile 'com.clouway.testing:cloud-firestore-testing:0.0.1'
+     compile 'com.clouway.testing:cloud-firestore-testing:0.0.4'
 }
 ```
 
@@ -22,7 +22,7 @@ In Maven:
  <dependency>
     <groupId>com.clouway.testing</groupId>
     <artifactId>cloud-firestore-testing</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.4</version>
  </dependency>
 
 ```
@@ -65,7 +65,7 @@ In Maven:
  
  Here is a complete Jenkins example:
  ```groovy  
- docker.image('pathmotion/firestore-emulator-docker:latest') { c ->
+ docker.image('clouway/firestore-emulator:alpine') { c ->
     docker.image('yourimage').inside("-e CI=true -e FIRESTORE_HOST=datastore -e FIRESTORE_PORT=8080 --link ${c.id}:datastore") {
         // perform your test execution here  
     }
