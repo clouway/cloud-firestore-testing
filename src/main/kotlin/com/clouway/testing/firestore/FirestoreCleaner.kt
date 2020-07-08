@@ -13,16 +13,16 @@ class FirestoreCleaner(val firestore: Firestore, val collectionNames: List<Strin
         return object : Statement() {
             override fun evaluate() {
                 val collections = if (collectionNames.isEmpty())
-                    firestore.listCollections()
-                else collectionNames.map {
-                    firestore.collection(it)
+                    firestore.listCollections().map { it.id }
+                else collectionNames
+
+                collections.forEach { collection ->
+                    firestore.collectionGroup(collection).get().get().forEach {
+                        it.reference.delete()
+                    }
                 }
 
-                collections.forEach {
-                    val future = it.get()
-                    val documents = future.get().documents
-                    documents.forEach { it.reference.delete() }
-                }
+                base.evaluate()
                 base.evaluate()
             }
         }

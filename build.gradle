@@ -24,7 +24,7 @@ allprojects {
     targetCompatibility = 1.8
 
     group = 'com.clouway.testing'
-    version = '0.0.4'
+    version = '0.0.6'
 
     modifyPom {
         project {
@@ -83,6 +83,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'com.google.cloud:google-cloud-firestore:1.29.0'
     implementation "org.testcontainers:testcontainers:1.11.4"
+
+    testCompile "junit:junit:4.12"
 }
 
 compileKotlin {

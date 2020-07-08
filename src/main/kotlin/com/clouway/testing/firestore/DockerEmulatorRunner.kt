@@ -21,6 +21,7 @@ class DockerEmulatorRunner : EmulatorRunner {
             GoogleCloudContainer()
                 .withExposedPorts(emulatorPort)
                 .withEnv("FIRESTORE_PROJECT_ID", projectName)
+                .withEnv("FIRESTORE_EMULATOR_HOST", "localhost:8080")
                 .waitingFor(LogMessageWaitStrategy().withRegEx("(?s).*running.*$"))
 
         firestoreContainer.start()
