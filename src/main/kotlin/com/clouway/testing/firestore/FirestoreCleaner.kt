@@ -18,7 +18,7 @@ class FirestoreCleaner(val firestore: Firestore, val collectionNames: List<Strin
 
                 collections.forEach { collection ->
                     firestore.collectionGroup(collection).get().get().forEach {
-                        it.reference.delete()
+                        it.reference.delete().get()
                     }
                 }
 
