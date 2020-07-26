@@ -23,7 +23,6 @@ class FirestoreCleaner(val firestore: Firestore, val collectionNames: List<Strin
                 }
 
                 base.evaluate()
-                base.evaluate()
             }
         }
     }
