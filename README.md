@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-     compile 'com.clouway.testing:cloud-firestore-testing:0.0.4'
+     compile 'com.clouway.testing:cloud-firestore-testing:0.0.9'
 }
 ```
 
@@ -22,7 +22,7 @@ In Maven:
  <dependency>
     <groupId>com.clouway.testing</groupId>
     <artifactId>cloud-firestore-testing</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.9</version>
  </dependency>
 
 ```
